@@ -2,13 +2,81 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VdoCipher Video Player</title>
+    <title>VdoCipher Video Embed</title>
 </head>
 <body>
-    <div id="vdoCipherPlayer"></div>
 
-    <script src="script.js"></script>
+    <h1>VdoCipher Video Embed</h1>
+
+    <div id="videoContainer">
+        <!-- The iframe will be dynamically added here -->
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Function to make a POST API call
+            function makePostRequest() {
+                const apiUrl = 'https://cors-anywhere.herokuapp.com/https://dev.vdocipher.com/api/videos/1fdf6a21d9594c5ebc2e4aef345af8de/otp';
+                const apiSecretKey = 'rAJ0b4D8snjx8zSLc6MArhRpRnkhCXyJzWQUEf689ppBbxSLMCpsIZyDclNqkftu'; // Replace with your actual API secret key
+
+                // Sample data to be sent in the request body
+                const postData = {
+                    ttl: 300
+                };
+
+                // Making a POST request using the Fetch API
+                fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Apisecret ${apiSecretKey}`,
+                        'Content-Type': 'application/json',
+                        // Add any other headers as needed
+                    },
+                    body: JSON.stringify(postData)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Handle the response data
+                    console.log('API Response:', data);
+
+                    // Extract OTP and playbackInfo from the response
+                    const receivedOTP = data.otp;
+                    const receivedPlaybackInfo = data.playbackInfo;
+
+                    // Embed the video using the received OTP and playbackInfo
+                    embedVideo(receivedOTP, receivedPlaybackInfo);
+                })
+                .catch(error => {
+                    // Handle errors
+                    console.error('Error:', error);
+                });
+            }
+
+            // Function to embed the video using OTP and playbackInfo
+            function embedVideo(otp, playbackInfo) {
+                const iframeSrc = `https://player.vdocipher.com/v2/?otp=${otp}&playbackInfo=${playbackInfo}`;
+
+                // Create an iframe element
+                const iframe = document.createElement('iframe');
+                iframe.src = iframeSrc;
+                iframe.style.border = '0';
+                iframe.style.width = '720px';
+                iframe.style.height = '405px';
+                iframe.allow = 'encrypted-media';
+                iframe.allowFullscreen = true;
+
+                // Append the iframe to the video container
+                document.getElementById('videoContainer').appendChild(iframe);
+            }
+
+            // Call the API function when a button is clicked
+            document.getElementById('postButton').addEventListener('click', makePostRequest);
+        });
+    </script>
+
+    <!-- Button to trigger the API call -->
+    <button id="postButton">Make API Call and Embed Video</button>
+
 </body>
 </html>
