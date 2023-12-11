@@ -1,34 +1,34 @@
-// api/getVdocipherOTP.js
+document.addEventListener("DOMContentLoaded", function () {
+    // Replace "YOUR_API_SECRET_KEY" and "VIDEO_ID" with your VdoCipher API secret key and video ID
+    const apiSecretKey = "YOUR_API_SECRET_KEY";
+    const videoId = "VIDEO_ID";
 
-const fetch = require('node-fetch');
+    // Step 1: HTTP request to obtain OTP
+    const requestOptions = {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Apisecret ${apiSecretKey}`
+        },
+        body: JSON.stringify({ ttl: 300 }),
+    };
 
-module.exports = async (req, res) => {
-    const vdocipherApiKey = 'rAJ0b4D8snjx8zSLc6MArhRpRnkhCXyJzWQUEf689ppBbxSLMCpsIZyDclNqkftu';
-    const videoId = '1fdf6a21d9594c5ebc2e4aef345af8de';
+    fetch(`https://dev.vdocipher.com/api/videos/${videoId}/otp`, requestOptions)
+        .then(response => response.json())
+        .then(data => {
+            // Step 2: Use OTP and playbackInfo in embed code
+            const otp = data.otp;
+            const playbackInfo = data.playbackInfo;
 
-    try {
-        const response = await fetch(`https://dev.vdocipher.com/api/videos/${videoId}/otp`, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Authorization': `Apisecret ${vdocipherApiKey}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                ttl: 300
-            })
-        });
+            const iframe = document.createElement("iframe");
+            iframe.src = `https://player.vdocipher.com/v2/?otp=${otp}&playbackInfo=${playbackInfo}`;
+            iframe.style.border = "0";
+            iframe.style.width = "720px";
+            iframe.style.height = "405px";
+            iframe.allow = "encrypted-media";
+            iframe.allowFullscreen = true;
 
-        const data = await response.json();
-
-        // Set CORS headers to allow requests from any origin
-        res.setHeader('Access-Control-Allow-Origin', '*');
-        res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, POST, GET');
-        res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-
-        res.json(data);
-    } catch (error) {
-        console.error('Error:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
-};
+            document.getElementById("vdoCipherPlayer").appendChild(iframe);
+        })
+        .catch(error => console.error("Error fetching VdoCipher OTP:", error));
+});
