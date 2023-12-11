@@ -19,31 +19,16 @@ module.exports = async (req, res) => {
             })
         });
 
-        // Check if the response is successful (status 2xx)
-        if (!response.ok) {
-            throw new Error(`Failed to get OTP. Status: ${response.status}`);
-        }
-
         const data = await response.json();
-
-        // Log the complete response from Vdocipher API
-        console.log('Vdocipher API Response:', data);
 
         // Set CORS headers to allow requests from any origin
         res.setHeader('Access-Control-Allow-Origin', '*');
         res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, POST, GET');
         res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-        // Check if the response contains valid JSON
-        if (!data || !data.otp || !data.playbackInfo) {
-            throw new Error('Invalid response from Vdocipher API');
-        }
-
         res.json(data);
     } catch (error) {
         console.error('Error:', error);
-
-        // Send an appropriate error response
         res.status(500).json({ error: 'Internal Server Error' });
     }
 };
