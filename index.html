@@ -51,7 +51,7 @@
         .then(data => {
             // Step 2: Use the OTP and playbackInfo in embed code
             const otp = data.otp;
-            const playbackInfo = encodeURIComponent(data.playbackInfo); // Encoding the playbackInfo
+            const playbackInfo = data.playbackInfo;
 
             // Embed the video player
             const vdocipherPlayer = document.getElementById('vdocipherVideo');
