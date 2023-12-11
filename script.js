@@ -3,8 +3,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const serverUrl = "/api/getVdoCipherOTP";
 
     // Replace "YOUR_API_SECRET_KEY" and "VIDEO_ID" with your VdoCipher API secret key and video ID
-    const apiSecretKey = "YOUR_API_SECRET_KEY";
-    const videoId = "VIDEO_ID";
+    const apiSecretKey = "rAJ0b4D8snjx8zSLc6MArhRpRnkhCXyJzWQUEf689ppBbxSLMCpsIZyDclNqkftu";
+    const videoId = "1fdf6a21d9594c5ebc2e4aef345af8de";
 
     // Step 1: HTTP request to obtain OTP
     const requestOptions = {
@@ -16,7 +16,12 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
     fetch(`${serverUrl}`, requestOptions)
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`VdoCipher API request failed with status ${response.status}`);
+            }
+            return response.json();
+        })
         .then(data => {
             // Step 2: Use OTP and playbackInfo in embed code
             const otp = data.otp;
