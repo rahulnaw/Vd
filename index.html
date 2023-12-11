@@ -17,9 +17,9 @@
         document.addEventListener('DOMContentLoaded', function () {
             // Function to make a POST API call
             function makePostRequest() {
-                const apiUrl = 'https://cors-anywhere.herokuapp.com/https://dev.vdocipher.com/api/videos/1ecea73bf1044abb90d4fec1b9b39872/otp';
+                const apiUrl = 'https://cors-anywhere.herokuapp.com/https://dev.vdocipher.com/api/videos/1fdf6a21d9594c5ebc2e4aef345af8de/otp';
                 const apiSecretKey = 'rAJ0b4D8snjx8zSLc6MArhRpRnkhCXyJzWQUEf689ppBbxSLMCpsIZyDclNqkftu'; // Replace with your actual API secret key
-                
+
                 // Sample data to be sent in the request body
                 const postData = {
                     ttl: 300
@@ -70,13 +70,10 @@
                 document.getElementById('videoContainer').appendChild(iframe);
             }
 
-            // Call the API function when a button is clicked
-            document.getElementById('postButton').addEventListener('click', makePostRequest);
+            // Automatically make the API call and embed the video when the page loads
+            makePostRequest();
         });
     </script>
-
-    <!-- Button to trigger the API call -->
-    <button id="postButton">Make API Call and Embed Video</button>
 
 </body>
 </html>
