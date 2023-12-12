@@ -29,6 +29,7 @@
                 // Making a POST request using the Fetch API
                 fetch(apiUrl, {
                     method: 'POST',
+                    mode: 'no-cors',
                     headers: {
                         'Authorization': `Apisecret ${apiSecretKey}`,
                         'Content-Type': 'application/json',
